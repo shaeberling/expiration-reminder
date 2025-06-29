@@ -111,6 +111,7 @@ export default function App() {
   const requests = new Requests();
   const householdManager = new HouseholdManager(requests);
   const sessionData = new SessionData();
+  const initialRoute = sessionData.idToken ? 'Main' : 'Login';
   const navigationRef = useRef<any>(null);
 
   const toggleAddProductModal = () => {
@@ -182,10 +183,10 @@ export default function App() {
   useEffect(() => {
     const checkAuthStatus = async () => {
       const idToken = sessionData.idToken;
-      setIsLoading(false);
       if (idToken) {
         handleLoginSuccess();
       }
+      setIsLoading(false);
     };
 
     checkAuthStatus();
@@ -320,7 +321,7 @@ export default function App() {
             translucent={true}
           />
           <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator initialRouteName="Login">
+            <Stack.Navigator initialRouteName={initialRoute}>
               <Stack.Screen name="Login" options={{ headerShown: false }}>
                 {(props) => <Login {...props} onLoginSuccess={handleLoginSuccess} />}
               </Stack.Screen>
